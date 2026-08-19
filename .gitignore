@@ -149,7 +149,7 @@ secrets.yml
 # ==============================================================================
 
 # --- OS generated files ---
-.DS_Store
+DS_Store
 Thumbs.db
 *.swp
 *.bak

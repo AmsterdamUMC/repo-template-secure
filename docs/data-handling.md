@@ -102,27 +102,11 @@ Expected files:
 
 ## What Gets Blocked
 
-The security system blocks these file types automatically:
+The security system blocks common data-file types (`.csv`, `.xlsx`, `.RData`, etc.), medical/research formats (imaging, biosignals, genomics), Dutch full names and street addresses, and email addresses.
 
-### Data Files
-- Tabular: `.csv`, `.tsv`, `.xlsx`, `.xls`, `.ods`
-- Statistical: `.sav`, `.dta`, `.RData`, `.rds`, `.sas7bdat`
-- Binary: `.feather`, `.parquet`, `.pickle`, `.h5`
-- Databases: `.sqlite`, `.db`
+**The full, current list lives in [SECURITY.md → Forbidden Content](../SECURITY.md#forbidden-content) - that's the source of truth, so check there rather than relying on a copy here.**
 
-### Medical/Research Data
-- Imaging: `.nii`, `.dcm` (brain scans, DICOM)
-- Biosignals: `.edf`, `.bdf` (EEG, ECG)
-- Genomics: `.fastq`, `.bam`, `.vcf`
-
-### Personal Information
-The system scans for:
-- Dutch names (first names + surnames)
-- Dutch addresses (street names + house numbers)
-- Patient ID patterns (7-digit numbers)
-- BSN (Burgerservicenummer)
-
-**See [SECURITY.md](../SECURITY.md#forbidden-content) for the complete list.**
+One thing worth knowing up front: patient ID and BSN (Burgerservicenummer) detection was tried and removed - it produced too many false positives to be workable. **The scanner is not a substitute for keeping patient identifiers out of `/data/` in the first place.**
 
 ---
 
@@ -194,7 +178,7 @@ cv_results <- cross_validate(model, patient_data, folds = 10)
 1. **myDRE shared workspaces**
    - Best for patient data
    - Secure, audited, GDPR-compliant
-   
+
 2. **Institutional network drives**
    - Y: drive or departmental shares
    - For non-patient research data
@@ -381,4 +365,4 @@ When in doubt:
 
 ---
 
-_This guide is maintained by Amsterdam UMC Research Software Management. Last updated: January 2026_
+_This guide is maintained by Amsterdam UMC Research Software Management._

@@ -250,7 +250,7 @@ Edit `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/AmsterdamUMC/org-security-workflows
-    rev: v0.2.21  # ← Update this version number
+    rev: v0.5.2  # ← Update this version number
 ```
 
 Then:
@@ -262,14 +262,13 @@ pre-commit run --all-files
 ### Q: The hooks are running very slowly. Is this normal?
 
 **First run is slow** because hooks need to:
-- Download security rules
-- Set up Python environments
+- Clone the `org-security-workflows` repo at the pinned version and set up Python environments (one-time, on `pre-commit install --install-hooks` or first run)
 - Scan all files
 
 **Subsequent runs are fast** because:
 - Hooks only check changed files
 - Environments are cached
-- Rules are downloaded once
+- The pinned rules are already on disk - nothing is re-fetched per commit
 
 **Tips for faster hooks:**
 - Commit smaller changes more frequently
@@ -288,16 +287,9 @@ pre-commit run --all-files --hook-stage push --show-diff-on-failure
 
 ### Q: Why does the scanner flag my code that processes patient data?
 
-**This is intentional.** The PII scanner looks for patterns that indicate sensitive data, including:
-- Variable names like `patient_name`, `bsn_number`
-- Dutch name patterns in strings
-- Address-like text
-- Medical record number formats
+**This is intentional.** It scans line *content*, not variable or identifier names - so a variable called `patient_name` or `bsn_number` won't itself trigger anything. What triggers a flag is an actual name, address, or email address appearing as text in the file (e.g. in a comment, a docstring, a printed example, or hardcoded test data).
 
-**This is a feature, not a bug.** Code that processes PII should be:
-1. Carefully reviewed
-2. Well-documented
-3. Minimized to only what's necessary
+For exactly what's detected, see [SECURITY.md → Forbidden Content](../SECURITY.md#forbidden-content).
 
 **If your code is legitimate:**
 - Add clear comments explaining what you're doing
@@ -306,23 +298,9 @@ pre-commit run --all-files --hook-stage push --show-diff-on-failure
 
 ### Q: What's the difference between `.gitignore` and pre-commit hooks?
 
-**`.gitignore`:**
-- **Passive** protection
-- Tells Git to ignore files
-- Easily bypassed with `-f` flag
-- No warnings or errors
-- Best for: Keeping your working directory clean
+Short version: `.gitignore` is passive (prevents `git add`, easily bypassed with `-f`) and pre-commit is active (scans and blocks, requires `--no-verify` to bypass). You need both - `.gitignore` stops accidental staging, pre-commit catches forced adds and already-tracked files.
 
-**Pre-commit hooks:**
-- **Active** protection
-- Actively scans and blocks
-- Requires `--no-verify` to bypass
-- Shows clear error messages
-- Best for: Catching mistakes before they're committed
-
-**You need both:**
-- `.gitignore` prevents accidental `git add`
-- Pre-commit catches forced adds or already-tracked files
+For the full breakdown of all four layers, see [Security Workflows](security-workflows.md).
 
 ### Q: Can the security team see my code?
 
@@ -332,7 +310,7 @@ pre-commit run --all-files --hook-stage push --show-diff-on-failure
 
 **Security scanning:**
 - Hooks run locally on your computer
-- Only metadata sent to telemetry (file types, not contents)
+- Only metadata sent to telemetry (repository name, commit, actor, and the list of blocked file names - not file contents)
 - GitHub Actions logs may contain file names (not contents)
 
 **Security incidents:**
@@ -354,9 +332,11 @@ pre-commit run --all-files --hook-stage push --show-diff-on-failure
 - SURF FileSender (up to 1TB, auto-deletes)
 - Data transfer agreements via data steward
 - Secure FTP (if institutionally approved)
+
+**Never, for any collaborator, internal or external:**
 - Email attachments
-- Personal cloud storage
-- USB drives (without encryption)
+- Personal cloud storage (personal Dropbox/Google Drive)
+- USB drives without encryption
 
 **Code-only collaboration:**
 - GitHub (no data files)
@@ -704,11 +684,11 @@ pre-commit run --all-files --verbose
 
 **Possible causes:**
 
-1. **Different versions**
-   - Local: v0.2.20
-   - GitHub: v0.2.21
+1. **Your local hooks are pinned to an older rules version**
+   - Local hooks use whatever `rev:` is set in `.pre-commit-config.yaml`
+   - The GitHub Action always fetches the current `central-gitignore.txt` from `org-security-workflows@main` - it isn't pinned
 
-   **Solution:** Update `.pre-commit-config.yaml` to match
+   **Solution:** Update the `rev:` in `.pre-commit-config.yaml` to the latest version and run `pre-commit autoupdate`
 
 2. **Files not tracked locally**
    ```bash
@@ -811,9 +791,9 @@ Anywhere else   # Risk of accidental commit
 - Committed sensitive data (URGENT)
 - Need exception for blocked file type
 - Questions about what's allowed
--  Setting up new projects
--  Before making repository public
--  Hooks not working as expected
+- Setting up new projects
+- Before making repository public
+- Hooks not working as expected
 
 ---
 
@@ -821,4 +801,4 @@ Anywhere else   # Risk of accidental commit
 
 ---
 
-_This FAQ is maintained by Amsterdam UMC Research Software Management. Last updated: January 2026_
+_This FAQ is maintained by Amsterdam UMC Research Software Management._

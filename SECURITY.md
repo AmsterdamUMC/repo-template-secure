@@ -2,8 +2,6 @@
 
 This repository is part of the Amsterdam UMC research environment. To protect patient privacy and research integrity, we enforce strict security controls throughout the Git development lifecycle.
 
-**Version:** 1.1
-**Last Updated:** January 2026
 **Contact:** [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
 
 ---
@@ -69,7 +67,7 @@ Contains patterns for:
 
 Checks performed:
 1. **Forbidden file types** - Blocks data files and credentials
-2. **Personal information** - Scans for Dutch names, addresses, patient IDs, BSN
+2. **Personal information** - Scans for Dutch full names (first name + surname), street addresses (street name + house number), and email addresses
 3. **Large files** - Warns about files >100KB
 4. **Code quality** - Trailing whitespace, merge conflicts
 
@@ -92,8 +90,8 @@ This catches:
 
 Actions taken on violation:
 1. Pull request blocked (cannot merge)
-2. Security team alerted automatically
-3. Tracking issue created
+2. Security telemetry sent to the `security-telemetry` repository (repository, commit, actor, and blocked files)
+3. Security team alerted from telemetry
 4. Committer contacted for remediation
 
 **This is the safety net when local checks fail or are bypassed.**
@@ -104,7 +102,7 @@ Actions taken on violation:
 
 The following content is **prohibited** from being committed to any Amsterdam UMC GitHub repository:
 
-###  Data Files
+### Data Files
 
 **All formats that commonly contain research or patient data:**
 
@@ -119,7 +117,7 @@ The following content is **prohibited** from being committed to any Amsterdam UM
 
 **Rationale:** These files are designed to store data. Even "anonymized" data may contain re-identification risks.
 
-###  Medical & Research Data
+### Medical & Research Data
 
 **Specialized formats used in healthcare and life sciences:**
 
@@ -138,18 +136,17 @@ The following content is **prohibited** from being committed to any Amsterdam UM
 
 | Type | Examples | Detection Method |
 |------|----------|------------------|
-| **Dutch names** | Jan de Vries, Marja van der Berg | Database of common Dutch names |
-| **Dutch addresses** | Postbus 1234, 1012 AB Amsterdam | Postal code patterns, street keywords |
-| **Patient IDs** | MRN: 20241234, Patient #12345 | Medical record number patterns |
-| **BSN** | 123456782 (with checksum) | Dutch social security number format |
-| **Email addresses** | patient@email.com in data context | Email patterns in suspicious contexts |
-| **Phone numbers** | +31 6 12345678 in data context | Dutch phone number patterns |
+| **Dutch full names** | Jan de Vries, Marja van der Berg | First name AND surname must both be present, matched against curated first-name and surname lists. A name alone (without the other part) is not flagged. |
+| **Dutch street addresses** | Kalverstraat 12 | Known street name (matched against a national address dataset) immediately followed by a house number |
+| **Email addresses** | someone@amsterdamumc.nl | Standard email pattern, excluding common placeholders (`example@`, `noreply@`, `info@`, etc.) |
 
-**Rationale:** Even without names, combinations of attributes can re-identify individuals.
+**Rationale:** Even without full identifiers, names, addresses, and email addresses can re-identify individuals or leak contact information.
 
-**Important:** The PII scanner looks for **patterns**, not just exact matches. Code that processes PII (e.g., anonymization scripts) may trigger false positives - this is intentional and requires manual review.
+**Not detected:** Patient IDs, BSN (Burgerservicenummer), medical record numbers, and phone numbers were evaluated for pattern-based detection and **removed** - the false-positive rate was too high to be workable (these patterns overlap too easily with ordinary numbers, IDs, and codes in research code). If your project handles these identifiers, the scanner will **not** catch them - keep them out of the repository via the `/data/` folder instead, and do not treat this policy's automated checks as a substitute for that discipline.
 
-###  Credentials & Secrets
+**Important:** The name and address scanner looks for **patterns**, not just exact matches. Code that processes PII (e.g., anonymization scripts, documentation with example names) may trigger false positives - this is intentional and requires manual review. (Markdown files are excluded from the name/address scan for this reason.)
+
+### Credentials & Secrets
 
 **Authentication and encryption materials:**
 
@@ -166,7 +163,7 @@ The following content is **prohibited** from being committed to any Amsterdam UM
 
 **Note:** Public certificates and sanitized config templates are allowed - the scanner looks for patterns indicating private keys or secrets.
 
-###  Other Prohibited Content
+### Other Prohibited Content
 
 | Category | File Extensions | Why Blocked |
 |----------|-----------------|-------------|
@@ -700,7 +697,7 @@ If security checks block legitimate content:
 **Before making a repository public:**
 
 - [ ] Full Git history reviewed (no sensitive data ever committed)
-- [ ] Security scans pass (GitHub Actions all green )
+- [ ] Security scans pass (GitHub Actions all green)
 - [ ] No credentials or secrets in code or config
 - [ ] README, LICENSE, and documentation complete
 - [ ] Code quality meets standards
@@ -846,12 +843,13 @@ This security policy supports compliance with:
 
 ### Audit Trail
 
-All security-relevant events are logged:
+Security-relevant events are logged:
 
-- Pre-commit/pre-push violations (local logs)
-- GitHub Actions failures (workflow logs)
-- Security alerts (telemetry system)
-- Manual exceptions (documented in security repo)
+- GitHub Actions failures (workflow run logs, retained per GitHub's retention settings)
+- Security telemetry (sent to the `security-telemetry` repository)
+- Manual exceptions (documented in the security repo)
+
+Pre-commit/pre-push checks print their findings to your terminal at commit/push time; they are not centrally logged unless you copy that output somewhere.
 
 ### Regular Reviews
 
@@ -882,24 +880,6 @@ All security-relevant events are logged:
 - **[GitHub Security Best Practices](https://docs.github.com/en/code-security)**
 - **[OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)**
 - **[NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)**
-
----
-
-## Policy Updates
-
-**Version History:**
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.1 | Jan 2026 | Added PII detection, improved incident response |
-| 1.0 | 2024 | Initial policy |
-
-**Change Process:**
-
-1. Propose changes via pull request to security team
-2. Security team reviews and approves
-3. Announce updates to all users
-4. Update documentation and training materials
 
 ---
 

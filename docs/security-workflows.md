@@ -115,20 +115,11 @@ Forbidden file detected: data/patients.csv
 #### 2. Personal Information Detection
 **Hook:** `check-personal-info`
 **Scans for:**
-- Dutch names (common first names and surnames)
-- Dutch addresses (street patterns, postal codes)
-- Patient IDs (MRN patterns)
-- BSN (Burgerservicenummer)
-- Medical record numbers
+- Dutch full names - a first name **and** a surname must both appear (matched against curated first-name and surname lists), to keep false positives low. A single name on its own is not flagged.
+- Dutch street addresses - a known street name (matched against a national address dataset) immediately followed by a house number
+- Email addresses - common placeholders (`example@`, `noreply@`, `info@`, etc.) are excluded
 
-This hook uses pattern matching and Dutch name databases to detect:
-
-```python
-# Examples of what gets flagged:
-"Jan de Vries, 1234 AB Amsterdam"     # Name + address
-"Patient MRN: 20241234"                # Medical record number
-"BSN: 123456782"                       # BSN format
-```
+This hook does **not** detect patient IDs, BSNs, or medical record numbers - those were tested and dropped because they produced far too many false positives against real research code and prose. If your data includes patient identifiers, the `/data/` folder (not this scanner) is what keeps them out of Git.
 
 Example output:
 
@@ -139,9 +130,9 @@ Example output:
 
 Personal information detected in: scripts/analysis.R
 
-Line 45: Jan de Vries, Postbus 1234, 1012 AB Amsterdam
-         ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-         Dutch name    Dutch address pattern
+Line 45: Jan de Vries lives on Kalverstraat 12
+         ^^^^^^^^^^^^                ^^^^^^^^^^^^^^
+         Full name (firstname+surname)   Street + house number
 
 This appears to contain personally identifiable information.
 Please remove or anonymize before committing.
@@ -165,7 +156,7 @@ The hooks are defined in `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/AmsterdamUMC/org-security-workflows
-    rev: v0.2.21
+    rev: v0.5.2
     hooks:
       - id: check-forbidden-filetypes
         stages: [pre-commit]
@@ -175,8 +166,10 @@ repos:
 
 These reference **centralized security rules** in the `org-security-workflows` repository, which means:
 - Rules are consistent across all Amsterdam UMC projects
-- Security updates apply to all repositories automatically
+- Security updates apply to all repositories once the `rev:` is bumped
 - No need to maintain rules in every project
+
+Note: pre-commit checks out `org-security-workflows` at the pinned `rev:` and caches it locally - it does **not** re-download rules on every commit. To pick up rule changes, someone has to bump the `rev:` (see "Keeping Rules Updated" below).
 
 ---
 
@@ -201,12 +194,12 @@ pre-commit install --hook-type pre-push
 
 ### What Gets Checked
 
-Same checks as pre-commit, but runs on **all commits in the push**, not just staged files:
+Same checks as pre-commit, but runs on **all commits in the push**, not just staged files, using the same locally-cached rule set at the pinned `rev:`:
 
 ```yaml
 repos:
   - repo: https://github.com/AmsterdamUMC/org-security-workflows
-    rev: v0.2.21
+    rev: v0.5.2
     hooks:
       - id: check-forbidden-filetypes-prepush
         stages: [pre-push]
@@ -240,11 +233,9 @@ jobs:
   filetype-check:
     uses: AmsterdamUMC/org-security-workflows/.github/workflows/check-forbidden-filetypes.yml@main
     secrets: inherit
-
-  personal-info-check:
-    uses: AmsterdamUMC/org-security-workflows/.github/workflows/check-personal-info.yml@main
-    secrets: inherit
 ```
+
+Unlike the local hooks, this workflow fetches `central-gitignore.txt` directly from `org-security-workflows@main` at run time - so it always enforces the current rules, even if a repository's local hooks are pinned to an older `rev:`.
 
 ### What Happens on Violation
 
@@ -255,21 +246,11 @@ If forbidden files are detected:
    - "Required checks failed"
    - PR cannot be merged
 
-2. **Security alert triggered**
-   - Security team receives automated notification
-   - Alert includes:
-     - Repository name
-     - File(s) that triggered violation
-     - Committer information
-     - Timestamp
+2. **Security telemetry sent**
+   - A `repository_dispatch` event is sent to `AmsterdamUMC/security-telemetry` with the repository name, commit, actor, and the list of blocked files
+   - The security team is notified from there
 
-3. **Issue created for tracking**
-   - Automatic GitHub issue opened
-   - Assigned to repository maintainers
-   - Contains remediation checklist
-
-4. **You are contacted**
-   - Email notification
+3. **You are contacted**
    - Guidance on next steps
    - Help with history cleanup if needed
 
@@ -291,16 +272,27 @@ All security rules live in the `AmsterdamUMC/org-security-workflows` repository:
 
 ```
 org-security-workflows/
-├── .github/workflows/
-│   ├── check-forbidden-filetypes.yml
-│   └── check-personal-info.yml
 ├── hooks/
-│   ├── check-forbidden-filetypes
-│   └── check-personal-info
-├── configs/
-│   ├── central-gitignore.txt
-│   ├── dutch-names.txt
-│   └── pii-patterns.json
+│   ├── filetype-check/
+│   │   ├── action.yml
+│   │   ├── check-filetypes-precommit.py
+│   │   ├── check-filetypes-precommit.sh
+│   │   ├── check-filetypes-prepush.py
+│   │   ├── check-filetypes-prepush.sh
+│   │   ├── filetypes.py        # shared detection logic
+│   │   └── filetypes.sh        # shared detection logic (bash)
+│   └── personal-info-check/
+│       ├── check-personal-info-precommit.py
+│       ├── check-personal-info-precommit.sh
+│       ├── check-personal-info-prepush.py
+│       ├── check-personal-info-prepush.sh
+│       ├── personal_info.py    # shared detection logic
+│       └── personal_info.sh    # shared detection logic (bash)
+├── personal-info-lists/
+│   ├── common-dutch-firstnames.txt
+│   ├── common-dutch-surnames.txt
+│   └── common-dutch-streetnames.txt
+├── central-gitignore.txt
 └── .pre-commit-hooks.yaml
 ```
 
@@ -309,12 +301,17 @@ org-security-workflows/
 1. **Consistency** - All projects use identical rules
 2. **Maintainability** - Update rules once, apply everywhere
 3. **Auditability** - Single source of truth for compliance
-4. **Version control** - Rules are versioned (v0.2.21)
+4. **Version control** - Rules are versioned (currently `v0.5.2`)
 
-When we update security rules:
-- Bump version in `org-security-workflows`
-- Update `rev:` in your `.pre-commit-config.yaml`
-- Run `pre-commit autoupdate`
+### Keeping Rules Updated
+
+The GitHub Actions layer always uses the latest rules on `main`. The local hooks (pre-commit/pre-push) only pick up new rules when the `rev:` in your `.pre-commit-config.yaml` is bumped:
+
+```bash
+pre-commit autoupdate
+```
+
+If you haven't updated in a while, it's worth checking that your pinned `rev:` isn't several versions behind `main` - the local hooks can silently lag the server-side checks otherwise.
 
 ---
 
@@ -340,6 +337,7 @@ The system might miss:
 - Base64-encoded credentials
 - Data in uncommon formats not in `.gitignore`
 - Creative obfuscation attempts
+- Names or addresses outside the curated Dutch name/street lists (e.g. non-Dutch names, uncommon spellings)
 
 **Mitigation:**
 - Regular security audits
@@ -352,11 +350,11 @@ The system might block legitimate files:
 - Configuration `.json` files
 - Test data that looks like real names
 - Public datasets
+- Common English words that happen to also be Dutch first or last names, in prose or code comments
 
 **Solution:**
 - Exceptions can be added to central config
 - Contact security team for review
-- Use `# nosecret` comments (if supported)
 
 ---
 
@@ -467,7 +465,7 @@ As a researcher using this template:
 **Recommended:**
 - Review staged changes before committing
 - Test hooks after setup
-- Update hooks periodically
+- Update hooks periodically (`pre-commit autoupdate`)
 - Read error messages carefully
 
 **Never:**
