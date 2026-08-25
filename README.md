@@ -236,7 +236,7 @@ Repositories should start **private by default**. Only make public after:
 
 ## License
 
-This template is provided under the MIT License. See [LICENSE](LICENSE) for details.
+This template is provided under the Apache 2.0 License. See [LICENSE](LICENSE) for details.
 
 ---
 

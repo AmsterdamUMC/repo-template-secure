@@ -56,7 +56,7 @@ All sensitive data is stored securely and must be accessed through approved inst
 
 ## License
 
-This project is licensed under the MIT License, unless stated otherwise.
+This project is licensed under the Apache 2.0 License, unless stated otherwise.
 
 ## Contact
 
