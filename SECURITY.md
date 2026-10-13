@@ -90,9 +90,8 @@ This catches:
 
 Actions taken on violation:
 1. Pull request blocked (cannot merge)
-2. Security telemetry sent to the `security-telemetry` repository (repository, commit, actor, and blocked files)
-3. Security team alerted from telemetry
-4. Committer contacted for remediation
+2. Security team alerted from telemetry
+3. Committer contacted for remediation
 
 **This is the safety net when local checks fail or are bypassed.**
 
@@ -237,27 +236,6 @@ pre-commit run --all-files
 ```
 
 Fix any violations before continuing work.
-
-### For Repository Administrators
-
-Additional setup for new repositories:
-
-1. **Enable branch protection rules**
-   - Settings → Branches → Add rule
-   - Require status checks: "Org Security Scan"
-   - Require branches to be up to date
-
-2. **Configure CODEOWNERS**
-   - Add security-aware reviewers
-   - Require review for security-sensitive paths
-
-3. **Set repository to private**
-   - Settings → Danger Zone → Change visibility
-   - Public repos require additional approval
-
-4. **Enable vulnerability alerts**
-   - Settings → Security & analysis
-   - Enable Dependabot alerts
 
 ---
 

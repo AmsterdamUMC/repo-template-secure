@@ -35,11 +35,11 @@ The `/data/` folder is:
 
 ```
 your-project/
-├── analysis.csv       # ⚠️ WILL BE COMMITTED!
+├── analysis.csv       # ! WILL BE COMMITTED!
 ├── scripts/
-│   └── temp.xlsx      # ⚠️ WILL BE COMMITTED!
+│   └── temp.xlsx      # ! WILL BE COMMITTED!
 └── results/
-    └── raw_data.RData # ⚠️ WILL BE COMMITTED!
+    └── raw_data.RData # ! WILL BE COMMITTED!
 ```
 
 ---
@@ -114,7 +114,8 @@ One thing worth knowing up front: patient ID and BSN (Burgerservicenummer) detec
 
 ### What Can Be Committed
 
-✅ **Aggregated results** (no individual data):
+&#x2713; **Aggregated results** (no individual data):
+
 ```R
 # Summary statistics (OK to commit)
 summary_stats <- data.frame(
@@ -125,7 +126,8 @@ summary_stats <- data.frame(
 write.csv(summary_stats, "results/summary.csv")
 ```
 
-✅ **Figures and plots** (without individual data points):
+&#x2713; **Figures and plots** (without individual data points):
+
 ```R
 # Group-level plot (OK to commit)
 ggplot(summary_stats, aes(x = group, y = mean_age)) +
@@ -133,7 +135,8 @@ ggplot(summary_stats, aes(x = group, y = mean_age)) +
 ggsave("results/figures/mean_age_by_group.png")
 ```
 
-✅ **Model coefficients**:
+&#x2713; **Model coefficients**:
+
 ```R
 # Regression output (OK to commit)
 model_summary <- summary(lm(outcome ~ treatment + age))
@@ -142,23 +145,43 @@ saveRDS(model_summary, "results/models/regression_summary.rds")
 
 ### What Cannot Be Committed
 
-❌ **Individual-level data**:
+✗ **Individual-level data**:
+
 ```R
 # Individual predictions (DO NOT COMMIT)
 predictions <- predict(model, newdata = patient_data)
 # Keep this in /data/outputs/
 ```
 
-❌ **Detailed cross-validation results**:
+✗ **Detailed cross-validation results**:
+
 ```R
 # Per-subject CV results (DO NOT COMMIT)
 cv_results <- cross_validate(model, patient_data, folds = 10)
 # Keep this in /data/outputs/
 ```
 
-❌ **Large output files** (>100KB):
+✗ **Large output files** (>100KB):
+
 - Pre-commit hooks will warn you
 - Consider if they contain granular data
+
+---
+
+## A note on Markdown files
+
+Files ending in `.md` (like this one) are **not scanned** for personal
+information by any of the automated checks, pre-commit, pre-push, or
+the GitHub Actions workflow. This is intentional: documentation often
+contains realistic-looking example names and addresses, and scanning
+`.md` files produced far too many false alarms.
+
+The practical effect: don't put real names, addresses, patient data,
+or any other sensitive information in a `.md` file, thinking it's
+covered by the same protection as your code. It isn't. If you need to
+document something involving real personal data, it doesn't belong in
+the repository at all, `.md` or otherwise, see [data-handling.md] for
+where that kind of information should actually live.
 
 ---
 
