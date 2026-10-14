@@ -108,7 +108,6 @@ For exactly how each layer works technically (config, detection logic, troublesh
 | `.pre-commit-config.yaml` | Local security hooks configuration                              |
 | `.gitignore`              | Prevents tracking sensitive file types                          |
 | `gitleaks.toml`           | Secrets detection configuration                                 |
-| `CODEOWNERS`              | Defines code reviewers                                          |
 | `CITATION.cff`            | **Placeholder** citation info - replace before anyone cites you |
 | `data/`                   | **Local-only** folder for data files (blocked by Git)           |
 | `scripts/`                | Your analysis code - this DOES get committed                    |
