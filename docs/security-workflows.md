@@ -156,7 +156,7 @@ The hooks are defined in `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/AmsterdamUMC/org-security-workflows
-    rev: v1.0.1
+    rev: v1.0.2
     hooks:
       - id: check-forbidden-filetypes
         stages: [pre-commit]
@@ -199,7 +199,7 @@ Same checks as pre-commit, but runs on **all commits in the push**, not just sta
 ```yaml
 repos:
   - repo: https://github.com/AmsterdamUMC/org-security-workflows
-    rev: v1.0.1
+    rev: v1.0.2
     hooks:
       - id: check-forbidden-filetypes-prepush
         stages: [pre-push]
@@ -301,7 +301,7 @@ org-security-workflows/
 1. **Consistency** - All projects use identical rules
 2. **Maintainability** - Update rules once, apply everywhere
 3. **Auditability** - Single source of truth for compliance
-4. **Version control** - Rules are versioned (currently `v1.0.1`)
+4. **Version control** - Rules are versioned (currently `v1.0.2`)
 
 ### Keeping Rules Updated
 

@@ -250,7 +250,7 @@ Edit `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/AmsterdamUMC/org-security-workflows
-    rev: v1.0.1  # ← Update this version number
+    rev: v1.0.2  # ← Update this version number
 ```
 
 Then:
