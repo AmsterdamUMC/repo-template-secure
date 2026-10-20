@@ -219,9 +219,8 @@ Repositories should start **private by default**. Only make public after:
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - How to contribute safely
 
 **Related systems:**
-- Security rules: https://github.com/amsterdamumc/org-security-workflows
-- Telemetry: https://github.com/amsterdamumc/security-telemetry
-- Organization-wide scanner: https://github.com/amsterdamumc/org-security-scanner
+- Security rules: https://github.com/AmsterdamUMC/org-security-workflows
+- The organisation-wide scanner and the telemetry receiver are internal; how the whole system works is described in the [Technical Maintenance Guide](https://doi.org/10.5281/zenodo.22789041) and the [policy report](https://doi.org/10.5281/zenodo.22655794).
 
 ---
 
