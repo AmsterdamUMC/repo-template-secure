@@ -180,8 +180,9 @@ The practical effect: don't put real names, addresses, patient data,
 or any other sensitive information in a `.md` file, thinking it's
 covered by the same protection as your code. It isn't. If you need to
 document something involving real personal data, it doesn't belong in
-the repository at all, `.md` or otherwise, see [data-handling.md] for
-where that kind of information should actually live.
+the repository at all, `.md` or otherwise. See
+[Where Your Data Should Live](#where-your-data-should-live) for where that
+kind of information should actually live.
 
 ---
 
@@ -298,7 +299,7 @@ write.csv(summary, "results/prediction_summary.csv")  # This is OK
 
 Use clearly synthetic data:
 
-```markdown
+````markdown
 ## Example Usage
 
 Given a dataset with this structure:
@@ -312,7 +313,7 @@ Run the analysis:
 ```R
 results <- analyze_cohort("data/raw/patients.csv")
 ```
-```
+````
 
 ### "I accidentally committed data last week"
 
