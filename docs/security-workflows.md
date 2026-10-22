@@ -115,7 +115,7 @@ Forbidden file detected: data/patients.csv
 #### 2. Personal Information Detection
 **Hook:** `check-personal-info`
 **Scans for:**
-- Dutch full names - a first name **and** a surname must both appear (matched against curated first-name and surname lists), to keep false positives low. A single name on its own is not flagged.
+- Dutch full names - a first name **and** a surname must both appear (matched against curated first-name and surname lists), to keep false positives low. A single name on its own is not flagged. Full-name detection is currently disabled: the first-name and surname lists are being rebuilt from other sources. Until then the address and email checks run as usual.
 - Dutch street addresses - a known street name (matched against a national address dataset) immediately followed by a house number
 - Email addresses - common placeholders (`example@`, `noreply@`, `info@`, etc.) are excluded
 
@@ -289,8 +289,6 @@ org-security-workflows/
 │       ├── personal_info.py    # shared detection logic
 │       └── personal_info.sh    # shared detection logic (bash)
 ├── personal-info-lists/
-│   ├── common-dutch-firstnames.txt
-│   ├── common-dutch-surnames.txt
 │   └── common-dutch-streetnames.txt
 ├── central-gitignore.txt
 └── .pre-commit-hooks.yaml

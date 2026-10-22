@@ -67,7 +67,7 @@ Contains patterns for:
 
 Checks performed:
 1. **Forbidden file types** - Blocks data files and credentials
-2. **Personal information** - Scans for Dutch full names (first name + surname), street addresses (street name + house number), and email addresses
+2. **Personal information** - Scans for Dutch full names (first name + surname; currently disabled, see below), street addresses (street name + house number), and email addresses
 3. **Large files** - Warns about files >100KB
 4. **Code quality** - Trailing whitespace, merge conflicts
 
@@ -135,7 +135,7 @@ The following content is **prohibited** from being committed to any Amsterdam UM
 
 | Type | Examples | Detection Method |
 |------|----------|------------------|
-| **Dutch full names** | Jan de Vries, Marja van der Berg | First name AND surname must both be present, matched against curated first-name and surname lists. A name alone (without the other part) is not flagged. |
+| **Dutch full names** | Jan de Vries, Marja van der Berg | First name AND surname must both be present, matched against curated first-name and surname lists. A name alone (without the other part) is not flagged. *Currently disabled while the name lists are rebuilt from other sources.* |
 | **Dutch street addresses** | Kalverstraat 12 | Known street name (matched against a national address dataset) immediately followed by a house number |
 | **Email addresses** | someone@amsterdamumc.nl | Standard email pattern, excluding common placeholders (`example@`, `noreply@`, `info@`, etc.) |
 
