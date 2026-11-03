@@ -62,4 +62,4 @@ This project is licensed under the Apache 2.0 License, unless stated otherwise.
 
 If you have questions about this repository, contact:
 
-[Bauke van der Velde](mailto:b.vandervelde@amsterdamumc.nl)
+[Your Name](mailto:your.email@amsterdamumc.nl)

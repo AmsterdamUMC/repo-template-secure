@@ -478,7 +478,7 @@ As a researcher using this template:
 
 ## Questions?
 
-- **Technical issues:** [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+- **Technical issues:** Open an issue in [org-security-workflows](https://github.com/AmsterdamUMC/org-security-workflows/issues) (never include sensitive data in an issue)
 - **Policy questions:** Contact your data steward
 - **False positives:** Open issue in `org-security-workflows` repo
 - **Security incidents:** See [SECURITY.md](../SECURITY.md)

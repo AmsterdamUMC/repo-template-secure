@@ -2,7 +2,7 @@
 
 This repository is part of the Amsterdam UMC research environment. To protect patient privacy and research integrity, we enforce strict security controls throughout the Git development lifecycle.
 
-**Contact:** [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+**Contact:** your data steward for incidents and data questions; an issue in [org-security-workflows](https://github.com/AmsterdamUMC/org-security-workflows/issues) for technical questions about the checks.
 
 ---
 
@@ -470,11 +470,11 @@ Any of the following requires immediate action:
 
 **Do NOT try to fix it yourself first** - Git history rewriting requires coordination.
 
-**Contact security team:**
+**Contact your data steward:**
 
-- **Email:** [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
 - **Subject:** "SECURITY INCIDENT: [Brief Description]"
 - **Mark as urgent/high priority**
+- **Also report it** through the Amsterdam UMC data-breach procedure
 
 **Include in your report:**
 
@@ -751,10 +751,7 @@ If you discover a vulnerability in **this project**:
 
 1. **Do NOT open a public issue**
 
-2. **Email security team privately:**
-   - **To:** [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
-   - **Subject:** "Security Vulnerability Report"
-   - **Mark as confidential**
+2. **Report it privately** through GitHub's private vulnerability reporting in [org-security-workflows](https://github.com/AmsterdamUMC/org-security-workflows/security) (Security tab → Report a vulnerability)
 
 3. **Include:**
    - Description of vulnerability
@@ -863,7 +860,7 @@ Pre-commit/pre-push checks print their findings to your terminal at commit/push 
 
 ## Questions & Support
 
-**Security Questions:** [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+**Security Questions:** Contact your data steward
 **Data Management:** Contact your data steward
 **Technical Support:** Research Software Management team
 **Policy Questions:** Amsterdam UMC Information Security Office

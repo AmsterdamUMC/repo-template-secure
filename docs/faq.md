@@ -51,7 +51,7 @@ pre-commit install --hook-type pre-push
    pre-commit run --all-files
    ```
 
-If still not working, contact [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl).
+If still not working, open an issue in [org-security-workflows](https://github.com/AmsterdamUMC/org-security-workflows/issues) with the error message (never include sensitive data in an issue).
 
 ### Q: Can I use this template without installing anything?
 
@@ -191,8 +191,8 @@ df = pd.read_csv(test_csv)
    - What exactly was exposed?
    - Did anyone else pull the commits?
 
-3. **Report to security team:**
-   - Email: [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+3. **Report it:**
+   - Contact your data steward and report it through the Amsterdam UMC data-breach procedure
    - Include: repo name, file, commit hash, timestamp
 
 4. **Follow remediation guidance**
@@ -418,7 +418,7 @@ load_dot_env()
 
 **Act immediately:**
 1. **Rotate the secret** - Generate new key/password
-2. **Contact security:** [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+2. **Report it:** contact your data steward
 3. **Don't just delete** - Git history remembers everything
 
 See [SECURITY.md](../SECURITY.md#incident-response) for full remediation steps.
@@ -716,11 +716,11 @@ pre-commit run --all-files --verbose
 ### Q: Who do I contact for different issues?
 
 **Technical problems (hooks, Git, setup):**
-- [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+- Open an issue in [org-security-workflows](https://github.com/AmsterdamUMC/org-security-workflows/issues) (never include sensitive data in an issue)
 - Include: error message, what you tried, your OS
 
 **Security incidents (committed sensitive data):**
-- [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+- Contact your data steward and report it through the Amsterdam UMC data-breach procedure
 - Mark as URGENT
 - See [SECURITY.md](../SECURITY.md#incident-response)
 
@@ -797,7 +797,7 @@ Anywhere else   # Risk of accidental commit
 
 ---
 
-**Still have questions?** Contact [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+**Still have questions?** Ask your data steward, or open an issue in [org-security-workflows](https://github.com/AmsterdamUMC/org-security-workflows/issues)
 
 ---
 

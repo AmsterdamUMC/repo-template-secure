@@ -146,7 +146,7 @@ This template is designed for researchers, not software engineers. You don't nee
 1. **Data goes in `/data/`** - that folder is safe, Git ignores it
 2. **Code goes in `/scripts/`** - this gets tracked by Git
 3. **If hooks block something** - read the error message, it will tell you what's wrong
-4. **If you're unsure** - ask! See the [FAQ](docs/faq.md) or contact [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+4. **If you're unsure** - ask! See the [FAQ](docs/faq.md), ask your data steward, or open an issue in [org-security-workflows](https://github.com/AmsterdamUMC/org-security-workflows/issues)
 
 ---
 
@@ -186,7 +186,7 @@ Think of this as **one layer** in your research data management strategy, focuse
 **Do NOT panic, but act immediately:**
 
 1. **Stop** - don't try to fix it yourself
-2. **Report** - contact <b.vandervelde@amsterdamumc.nl> immediately, subject "SECURITY INCIDENT"
+2. **Report** - contact your data steward immediately, subject "SECURITY INCIDENT", and report it through the Amsterdam UMC data-breach procedure
 3. **Do NOT** open a public GitHub issue
 4. **Include:** repository name, what was exposed, when committed
 
@@ -226,7 +226,7 @@ Repositories should start **private by default**. Only make public after:
 
 ## Support
 
-**Technical questions:** <b.vandervelde@amsterdamumc.nl>
+**Technical questions:** Open an issue in [org-security-workflows](https://github.com/AmsterdamUMC/org-security-workflows/issues) (never include sensitive data in an issue)
 **Data management:** Contact your data steward
 **Security incidents:** [SECURITY.md](SECURITY.md) (mark URGENT)
 

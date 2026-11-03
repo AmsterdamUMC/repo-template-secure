@@ -320,7 +320,7 @@ results <- analyze_cohort("data/raw/patients.csv")
 **Don't panic, but act immediately:**
 
 1. **Stop** - Don't make more commits
-2. **Report** - Email [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl) with subject "SECURITY INCIDENT"
+2. **Report** - Contact your data steward with subject "SECURITY INCIDENT", and report it through the Amsterdam UMC data-breach procedure
 3. **Include:**
    - Repository name
    - What file was committed
@@ -370,8 +370,8 @@ Before sharing:
 - **What can/can't be committed:** Check [SECURITY.md](../SECURITY.md) or ask your data steward
 - **Where to store data:** Contact your data steward
 - **How to share data:** Contact your data steward
-- **Technical issues:** [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
-- **False positives:** [b.vandervelde@amsterdamumc.nl](mailto:b.vandervelde@amsterdamumc.nl)
+- **Technical issues:** Open an issue in [org-security-workflows](https://github.com/AmsterdamUMC/org-security-workflows/issues) (never include sensitive data in an issue)
+- **False positives:** Contact your data steward
 
 **Still unsure?** The rule is simple: If you're not certain a file is safe to commit, ask first. It's always better to check than to risk a data breach.
 
