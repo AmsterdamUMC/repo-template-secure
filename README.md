@@ -1,5 +1,7 @@
 # Research Project Template (Secure & Reproducible)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23918629.svg)](https://doi.org/10.5281/zenodo.23918629)
+
 This repository template helps Amsterdam UMC researchers:
 
 - Organize research code and analysis
